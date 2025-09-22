@@ -1,0 +1,80 @@
+<view class="page">
+  <view class="banner">{{ tip || '正在检查…' }}</view>
+
+  <!-- 单词检查 -->
+  <view class="section" wx:if="{{suggest && suggest.checkWords}}">
+    <view class="section-title">单词检查</view>
+
+    <view class="row head">
+      <text class="col col-idx">#</text>
+      <text class="col col-word">原词</text>
+      <text class="col col-status">状态</text>
+      <text class="col col-sug">建议</text>
+      <text class="col col-act">操作</text>
+    </view>
+
+    <block wx:for="{{suggest.checkWords.results || []}}" wx:key="index">
+      <view class="row">
+        <text class="col col-idx">{{index + 1}}</text>
+        <text class="col col-word mono">{{item.word}}</text>
+        <text class="col col-status {{ item.ok ? 'ok' : 'err' }}">
+          {{ item.ok ? 'OK' : (item.reason || '问题') }}
+        </text>
+
+        <!-- 直接用预计算的 sugText，保证可见 -->
+        <text class="col col-sug">{{ item.sugText || '—' }}</text>
+
+        <view class="col col-act">
+          <button
+            size="mini"
+            data-idx="{{index}}"
+            bindtap="onAcceptOneWord"
+            wx:if="{{!item.ok && item.suggestions && item.suggestions.length}}"
+          >接受</button>
+        </view>
+      </view>
+    </block>
+
+    <view class="ops">
+      <button size="mini" bindtap="onAcceptAllWords" wx:if="{{suggest.checkWords.results && suggest.checkWords.results.length}}">
+        全部接受（单词）
+      </button>
+      <button size="mini" bindtap="onRecheck">重新检查</button>
+    </view>
+  </view>
+
+  <!-- 句式规范 -->
+  <view class="section" wx:if="{{suggest && suggest.validate}}">
+    <view class="section-title">句式规范</view>
+
+    <view class="subtitle">问题列表</view>
+    <block wx:for="{{suggest.validate.issues || []}}" wx:key="field">
+      <view class="row">
+        <text class="mono">{{item.field}}</text>
+        <text class="badge">{{item.type}}</text>
+        <text class="hint" wx:if="{{item.hint}}">{{item.hint}}</text>
+      </view>
+    </block>
+    <view class="row" wx:if="{{!(suggest.validate.issues && suggest.validate.issues.length)}}">
+      <text class="hint">未发现句式问题</text>
+    </view>
+
+    <view class="subsection">
+      <view class="subtitle">应用后的预览</view>
+      <block wx:for="{{(suggest.validate.normalized && suggest.validate.normalized.dialogue) || []}}" wx:key="*this">
+        <view class="row">
+          <text class="mono">{{item.speaker ? item.speaker + ':' : ''}} {{item.text}}</text>
+        </view>
+      </block>
+    </view>
+
+    <view class="ops">
+      <button size="mini" bindtap="onApplyNormalization">应用句式规范</button>
+      <button size="mini" bindtap="onRecheck">重新检查</button>
+    </view>
+  </view>
+
+  <view class="actions">
+    <button class="btn primary" bindtap="onConfirmAndBack">确认并返回</button>
+  </view>
+</view>

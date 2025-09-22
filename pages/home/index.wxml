@@ -1,0 +1,77 @@
+<view class="page">
+
+<!-- 标题与备注 -->
+<view class="section">
+  <view class="field">
+    <view class="label">作业标题</view>
+    <input class="input"
+           placeholder="请输入标题（必填）"
+           value="{{raw.title}}"
+           bindinput="onTitleInput" />
+  </view>
+
+  <view class="field">
+    <view class="label">备注</view>
+    <input class="input"
+           placeholder="给学生/家长的说明（可选）"
+           value="{{raw.note}}"
+           bindinput="onNoteInput" />
+  </view>
+</view>
+
+<!-- 单词 -->
+<view class="section">
+  <view class="label">单词（每行一个）</view>
+  <textarea class="textarea"
+            placeholder="例如：&#10;apple&#10;banana&#10;good morning"
+            value="{{raw.wordsText}}"
+            bindinput="onWordsInput"
+            auto-height="true" />
+</view>
+
+<!-- 对话 -->
+<view class="section">
+  <view class="label">对话（每行一条，可写成 A: Hello）</view>
+  <textarea class="textarea"
+            placeholder="例如：&#10;A: Hello, class!&#10;B: Good morning, teacher."
+            value="{{raw.dialogueText}}"
+            bindinput="onDialogueInput"
+            auto-height="true" />
+</view>
+
+<!-- 操作按钮 -->
+<view class="actions">
+  <button class="btn" bindtap="goCheckPage">检查与规范</button>
+  <button class="btn" loading="{{loadingPreview}}" bindtap="onPreviewTap">预览音频</button>
+  <button class="btn primary" loading="{{loadingPublish}}" bindtap="onPublishTap">发布作业</button>
+</view>
+
+<!-- 学生选择 -->
+<view class="section">
+  <view class="section-title">选择学生（已选 {{selectedStudents.length}} 人）</view>
+
+  <view class="students-wrap">
+    <block wx:for="{{students}}" wx:key="id">
+      <view class="student-chip {{ selectedSet[item.id] ? 'selected' : '' }}"
+            data-id="{{item.id}}"
+            bindtap="toggleStudent">
+        <text class="mark" wx:if="{{ selectedSet[item.id] }}">✓</text>
+        <text>{{item.name}}</text>
+      </view>
+    </block>
+  </view>
+
+  <view class="student-actions">
+    <button size="mini" bindtap="onSelectAll">全选</button>
+    <button size="mini" bindtap="onSelectNone">清空</button>
+  </view>
+
+  <view class="selected-list" wx:if="{{selectedStudents.length}}">
+    已选：{{selectedStudents.join(', ')}}
+  </view>
+</view>
+
+<view class="tip">提示：建议先“检查与规范”，确认无误后再“预览/发布”。</view>
+
+</view>
+

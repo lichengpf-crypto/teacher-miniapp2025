@@ -1,0 +1,11 @@
+/* pages/preview/index.wxss */
+.page { padding: 20rpx; }
+.head { margin-bottom: 12rpx; }
+.title { font-size: 34rpx; font-weight: 600; }
+.card { border: 1rpx solid #eee; border-radius: 16rpx; padding: 16rpx; margin-bottom: 16rpx; }
+.row { margin: 10rpx 0; }
+.tag { color: #666; margin-right: 8rpx; }
+.text { color: #333; }
+.err { color: #d93026; }
+.empty { color: #999; padding: 24rpx 0; text-align: center; }
+
